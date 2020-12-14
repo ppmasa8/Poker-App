@@ -110,7 +110,7 @@ GEM
       mustermann (>= 1.0.0)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
-    pg (1.2.3)
+    pg (0.17.1)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -227,7 +227,7 @@ DEPENDENCIES
   grape
   jbuilder (~> 2.0)
   jquery-rails
-  pg (~> 1.2.3)
+  pg (= 0.17.1)
   pry-byebug
   pry-doc
   pry-rails
