@@ -1,0 +1,54 @@
+// Place all the styles related to the tasks controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+body {
+  background-color: orange;
+.foo {
+  text-align: center;
+  margin-bottom: 0;
+}
+.top {
+  text-align: center;
+}
+.container {
+  padding-top: 70px;
+  padding-bottom: 400px;
+  background-color: ghostwhite;
+  border-radius: 10px;
+  .text-holder {
+    margin: auto;
+    padding-bottom: 20px;
+    text-align: center;
+    input[type="text"] {
+      width: 300px;
+      height: 40px;
+    }
+  }
+  .button {
+    margin: auto;
+    text-align: center;
+    input[type="submit"] {
+      width: 200px;
+      height: 40px;
+      background-color: orange;
+      border: none;
+      color: white;
+      border-radius: 20px;
+    }
+  }
+  .error {
+    text-align: center;
+    background-color: indianred;
+    background-clip: content-box;
+    margin: 20px 400px 0 400px;
+    height: 100px;
+    border-radius: 5px;
+  }
+
+  .role {
+    padding: 20px 100px 0 100px;
+    text-align: center;
+  }
+
+}
+}
