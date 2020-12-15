@@ -14,10 +14,8 @@ module API
         end
         # GET /api/ver1/poker
         desc 'ポーカーの役を返す'
-
         # prefix 'poker/'
         post "/" do
-
           #配列やら文字列の箱
           result_array = []
           battle = []
@@ -68,13 +66,21 @@ module API
           end
 
 
-          if error_array == []
+
+
+          if error_array == [] && result_array == []
           {
-            result:result_array
+            error: {
+              message: "入力してください"
+            }
           }
           elsif result_array == []
             {
               error:error_array
+            }
+          elsif error_array == []
+            {
+              result:result_array
             }
           else
             {

@@ -5,14 +5,12 @@
 
 <div class="container">
   <%= form_tag("/tasks/check") do %>
-    <div class="text-holder"><%= text_field_tag(:cards,"", placeholder: "C3 H5 D6 S11 C2" ) %></div>
+    <div class="text-holder"><%= text_field_tag(:cards,value=@cards, placeholder: "C3 H5 D6 S11 C2") %></div>
     <div class="button"><%= submit_tag "Check" %></div>
   <% end %>
-  <!--<p class="text"><%#= @role %></p>-->
   <% if flash[:notice] %>
     <div class="error"><%= flash[:notice] %></div>
   <% end %>
-
   <div class="role"><%= @role %></div>
 
 
