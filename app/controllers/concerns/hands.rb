@@ -26,10 +26,9 @@ module Hands
   #空欄の場合のバリデーション
   def validation_nil(cards, error_messages)
     if cards.empty?
-      msg = "空欄です"
+      msg = "空欄です。"
       error_messages << msg
     end
-    #error_messages.empty? ? true : false
   end
 
   #データの形式のバリデーション
@@ -38,16 +37,13 @@ module Hands
       msg = "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"
       error_messages << msg
     end
-    #error_messages.empty? ? true : false
   end
 
   #カードの枚数のバリデーション
   def validation_numberofcards(cards, error_messages)
-    if cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
-      msg = "カードの枚数が4枚です"
-      error_messages << msg
-    elsif cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
-      msg = "カードの枚数が6枚です"
+    card_count = cards.scan(/[a-zA-Z](\d|\d\d)/).size
+    if card_count != 5 && card_count != 0
+      msg = "カードの枚数が#{card_count}枚です。"
       error_messages << msg
     end
   end
@@ -66,11 +62,10 @@ module Hands
 
   #重複チェックのバリデーション
   def validation_overlap(cards, error_messages)
-    cards = cards.split(" ")
-    if cards[0]==nil || cards[1]==nil || cards[2]==nil || cards[3]==nil || cards[4]==nil
-
-    elsif cards.uniq.count < 5
-      msg = "カードが重複しています"
+    card = cards.split(" ")
+    if card[0]==nil || card[1]==nil || card[2]==nil && card.uniq.count == 2|| card[3]==nil && card.uniq.count == 3 || card[4]==nil && card.uniq.count ==4
+    elsif card.uniq.count != 5 || cards.scan(/[a-zA-Z](\d|\d\d)/).size > 5 && card.uniq.count == 5
+      msg = "カードが重複しています。"
       error_messages << msg
     end
     error_messages.empty? ? true : false
@@ -79,7 +74,7 @@ module Hands
   #全角スペースのバリデーション
   def validation_blank(cards, error_messages)
     if cards.index("　")
-      msg = "全角スペースが含まれています"
+      msg = "全角スペースが含まれています。"
       error_messages << msg
     end
     error_messages.empty? ? true : false
@@ -198,7 +193,6 @@ module Hands
   end
 
 
-
     #フルハウス
   def judge_full(cards)
     num = Array.new
@@ -209,6 +203,7 @@ module Hands
       true
     end
   end
+
 
 
 

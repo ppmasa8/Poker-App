@@ -20,7 +20,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが帰ってくるか"
         it "一つのエラーに対して、それぞれ対応したメッセージが返ってくるか" do
           json = JSON.parse(response.body)
-          expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}]
+          expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です。", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}]
         end
       end
 
@@ -31,7 +31,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが帰ってくるか"
           it "複数のエラーに対して、それぞれ対応したメッセージが返ってくるか" do
             json = JSON.parse(response.body)
-            expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}, {"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>["5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）", "1番目のカードの指定文字が不正です。(aaa)"]}]
+            expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です。", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}, {"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>["5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）", "1番目のカードの指定文字が不正です。(aaa)"]}]
           end
         end
       end
@@ -81,7 +81,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが帰ってくるか"
         it "一つのエラーと一つのリザルトに対して、対応したメッセージ(trueとエラー)が返ってくるか" do
           json = JSON.parse(response.body)
-          expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}],
+          expect(json).to eq "error" => [{"card"=>"", "msg"=>["空欄です。", "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"]}],
                              "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>"ストレートフラッシュ"}]
         end
       end

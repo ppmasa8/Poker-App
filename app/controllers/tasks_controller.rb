@@ -11,7 +11,7 @@ class TasksController < ApplicationController
     error_messages = []
 
     if validation(@cards, error_messages)
-      flash.now[:notice] = error_messages
+      flash.now[:notice] = error_messages.join("")
     else
       role = judge(@cards)
       @role = role
