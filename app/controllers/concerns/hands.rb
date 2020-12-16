@@ -26,7 +26,7 @@ module Hands
   #空欄の場合のバリデーション
   def validation_nil(cards, error_messages)
     if cards.empty?
-      msg = "空欄です。"
+      msg = "空欄です。<br>"
       error_messages << msg
     end
   end
@@ -34,16 +34,16 @@ module Hands
   #データの形式のバリデーション
   def validation_form(cards, error_messages)
     if !cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
-      msg = "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"
+      msg = "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>"
       error_messages << msg
     end
   end
 
   #カードの枚数のバリデーション
   def validation_numberofcards(cards, error_messages)
-    card_count = cards.scan(/[a-zA-Z](\d|\d\d)/).size
+    card_count = cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])/).size
     if card_count != 5 && card_count != 0
-      msg = "カードの枚数が#{card_count}枚です。"
+      msg = "カードの枚数が#{card_count}枚です。<br>"
       error_messages << msg
     end
   end
@@ -53,7 +53,7 @@ module Hands
     cards = cards.split
     cards.each.with_index do |card, i|
       if !card.match(/^[SDCH][2-9]$|^[SDCH][1][0-3]$|^[SDCH][1]$/)
-        msg = "#{i+1}番目のカードの指定文字が不正です。(#{card})"
+        msg = "#{i+1}番目のカードの指定文字が不正です。(#{card})<br>"
         error_messages << msg
       end
     end
@@ -65,7 +65,7 @@ module Hands
     card = cards.split(" ")
     if card[0]==nil || card[1]==nil || card[2]==nil && card.uniq.count == 2|| card[3]==nil && card.uniq.count == 3 || card[4]==nil && card.uniq.count ==4
     elsif card.uniq.count != 5 || cards.scan(/[a-zA-Z](\d|\d\d)/).size > 5 && card.uniq.count == 5
-      msg = "カードが重複しています。"
+      msg = "カードが重複しています。<br>"
       error_messages << msg
     end
     error_messages.empty? ? true : false

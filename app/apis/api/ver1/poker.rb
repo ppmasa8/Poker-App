@@ -12,9 +12,9 @@ module API
         params do
           requires :cards, type: Array
         end
-        # GET /api/ver1/poker
+
         desc 'ポーカーの役を返す'
-        # prefix 'poker/'
+
         post "/" do
           #配列やら文字列の箱
           result_array = []
@@ -33,7 +33,7 @@ module API
             if validation(card[i], error_messages)
               err = {
                 card: card[i],
-                msg: error_messages
+                msg: error_messages.join("").gsub("<br>", ",").split(",")
               }
               error_array << err
               battle << 0
@@ -64,7 +64,6 @@ module API
             end
             i+=1
           end
-
 
 
 

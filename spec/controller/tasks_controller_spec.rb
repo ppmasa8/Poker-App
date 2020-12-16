@@ -31,7 +31,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "空欄です。5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"
+        expect(flash[:notice]).to eq "空欄です。<br>5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -42,7 +42,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）1番目のカードの指定文字が不正です。(AAAAA)"
+        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>カードの枚数が2枚です。<br>1番目のカードの指定文字が不正です。(AAAAA)<br>"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -53,7 +53,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5番目のカードの指定文字が不正です。(A1)"
+        expect(flash[:notice]).to eq "5番目のカードの指定文字が不正です。(A1)<br>"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -64,7 +64,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "カードが重複しています。"
+        expect(flash[:notice]).to eq "カードが重複しています。<br>"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -75,7 +75,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）4番目のカードの指定文字が不正です。(C7　H10)全角スペースが含まれています。"
+        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>4番目のカードの指定文字が不正です。(C7　H10)<br>全角スペースが含まれています。"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -86,7 +86,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）カードの枚数が4枚です。"
+        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>カードの枚数が4枚です。<br>"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end

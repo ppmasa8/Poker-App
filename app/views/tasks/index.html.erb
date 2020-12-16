@@ -9,7 +9,7 @@
     <div class="button"><%= submit_tag "Check" %></div>
   <% end %>
   <% if flash[:notice] %>
-    <div class="error"><%= flash[:notice] %></div>
+    <div class="error"><%= flash[:notice].html_safe %></div>
   <% end %>
   <div class="role"><%= @role %></div>
 

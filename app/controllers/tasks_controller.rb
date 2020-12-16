@@ -10,6 +10,7 @@ class TasksController < ApplicationController
 
     error_messages = []
 
+    # 共通処理の部分
     if validation(@cards, error_messages)
       flash.now[:notice] = error_messages.join("")
     else
