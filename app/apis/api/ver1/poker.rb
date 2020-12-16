@@ -4,7 +4,6 @@ module API
       helpers do
         include Hands
       end
-
       resource :poker do
         version 'ver1'
         content_type :json, "application/json"
@@ -15,58 +14,69 @@ module API
 
         desc 'ポーカーの役を返す'
 
-        post "/" do
-          #配列やら文字列の箱
-          result_array = []
-          battle = []
-          error_array = []
 
+        post "/" do
+          #json形式のメッセージの配列 #[todo]コメントを具体的に（実態に即した形で）fixed
+          # [todo]リーダブルこーど読んでね♡
+          result_array = []
+          error_array = []
+          error_messages = []
+          #強さ判定の配列
+          strength_array = [] #[todo]変数名をしゅうせいする fixed
 
           #受け取った値の処理
-          card = params[:cards]
-          num = card.length
-          #バリデーション
+          hands = params[:cards]
 
-          i=0
-          while i < num
-            error_messages = []
-            if validation(card[i], error_messages)
-              err = {
-                card: card[i],
-                msg: error_messages.join("").gsub("<br>", ",").split(",")
-              }
-              error_array << err
-              battle << 0
+          #手札の強さの格納のメソッド
+          index=0
+          while index < hands.length
+            if validation(hands[index], error_messages) == true
+              strength_array << judge_return_number(hands)
             else
-              battle << api_judge(card[i])
+              strength_array << 0
             end
-            i+=1
+            index+=1
           end
 
-          #正常なデータの処理
-          i=0
-          while i < num
-            if battle[i] == 0
-            elsif battle.max == battle[i]
-              msg = {
-                card: card[i],
-                hand: judge(card[i]),
+
+          #手札のバリデーションのメソッド
+          index=0
+          while index < hands.length
+            error_messages = []
+            if strength_array[index] == 0
+              error_array << {
+                card: hands[index],
+                msg: validation(hands[index], error_messages)
+              }
+            end
+            index+=1
+          end
+
+
+          #正常なデータの処理のメソッド
+          index=0
+          while index < hands.length
+            if strength_array[index] == 0
+            elsif strength_array[index] == strength_array.max
+              result_array << {
+                card: hands[index],
+                hand: judge_return_role(hands[index]),
                 best: "true"
               }
-              result_array << msg
             else
-              msg = {
-                card: card[i],
-                hand: judge(card[i]),
+              result_array << {
+                card: hands[index],
+                hand: judge_return_role(hands[index]),
                 best: "false"
               }
-              result_array << msg
             end
-            i+=1
+            index+=1
           end
 
 
 
+
+          #json形式のデータがケース別に入る
           if error_array == [] && result_array == []
           {
             error: {

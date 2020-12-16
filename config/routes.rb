@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
   get  'tasks/index' => 'tasks#index'
   post "tasks/check" => "tasks#check"
-  get "tasks/check" => "tasks#index"
+  get "tasks/check" => "tasks#check"
   mount API::Root => "/"
 
 

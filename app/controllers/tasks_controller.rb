@@ -11,11 +11,12 @@ class TasksController < ApplicationController
     error_messages = []
 
     # 共通処理の部分
-    if validation(@cards, error_messages)
-      flash.now[:notice] = error_messages.join("")
+    # [TODO]validationがtrueの時に処理が通るようにしたほうが良い  fixed
+    if @cards == nil
+    elsif validation(@cards, error_messages) == true
+      @role = judge_return_role(@cards)
     else
-      role = judge(@cards)
-      @role = role
+      flash.now[:notice] = error_messages.join("</br>")
     end
 
     # ページ再読み込み
