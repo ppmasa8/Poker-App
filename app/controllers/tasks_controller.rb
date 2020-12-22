@@ -14,8 +14,11 @@ class TasksController < ApplicationController
     if @cards == nil
     elsif validation(@cards, error_messages) == true
       @role = judge_return_role(@cards)
+    elsif validation(@cards, error_messages)
+      error_messages = []
+      flash.now[:notice] = validation(@cards, error_messages).join("</br>")
     else
-      flash.now[:notice] = error_messages.join("</br>")
+      flash.now[:notice] = "不正な入力です。"
     end
 
     # ページ再読み込み

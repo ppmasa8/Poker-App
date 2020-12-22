@@ -1,5 +1,4 @@
 module Hands
-  #extend ActiveSupport::Concern
   STRIGHTFLUSH = ["ストレートフラッシュ", 9]
   FOUROFAKIND = ["フォー・オブ・ア・カインド", 8]
   FULLHOUSE = ["フルハウス", 7]
@@ -10,9 +9,12 @@ module Hands
   ONEPAIR = ["ワンペア", 2]
   HIGHCARD = ["ハイカード", 1]
 
+  EMPTY_MSG = "空欄です。"
+  FORMAT_MSG = "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"
+  DUPLICATE_MSG = "カードが重複しています。"
+  HALF_SPACE_MSG = "全角スペースが含まれています。"
 
-
-  # バリデーションまとめ
+  #バリデーションまとめ
   def validation(cards, error_messages)
     ensure_not_empty(cards, error_messages)
     ensure_format(cards, error_messages)
@@ -27,16 +29,14 @@ module Hands
   #空欄の場合のバリデーション
   def ensure_not_empty(cards, error_messages)
     if cards.empty?
-      msg = "空欄です。"
-      error_messages << msg
+      error_messages << EMPTY_MSG
     end
   end
 
   #データの形式のバリデーション
   def ensure_format(cards, error_messages)
     if !cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
-      msg = "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）"
-      error_messages << msg
+      error_messages << FORMAT_MSG
     end
   end
 
@@ -65,16 +65,14 @@ module Hands
     card = cards.split(" ")
     if card[0]==nil || card[1]==nil || card[2]==nil && card.uniq.count == 2|| card[3]==nil && card.uniq.count == 3 || card[4]==nil && card.uniq.count ==4
     elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])/).size != card.uniq.count
-      msg = "カードが重複しています。"
-      error_messages << msg
+      error_messages << DUPLICATE_MSG
     end
   end
 
   #全角スペースのバリデーション
   def ensure_half_space(cards, error_messages)
     if cards.include?("　")
-      msg = "全角スペースが含まれています。"
-      error_messages << msg
+      error_messages << HALF_SPACE_MSG
     end
   end
 
@@ -82,7 +80,7 @@ module Hands
 
 
   #以下、役判定
-  # 役判定して約名を返す処理
+  #役判定して約名を返す処理
   def judge_return_role(cards)
     cards = cards.split
     if judge_straight(cards) && judge_flash(cards)
@@ -133,13 +131,13 @@ module Hands
   #フラッシュを見る処理
   def judge_flash(cards)
     card_suit = cards.each.map {|s| s.slice(0)}
-    if card_suit.inject(:+) == "SSSSS" || card_suit.inject(:+) =="DDDDD" || card_suit.inject(:+) =="CCCCC" || card_suit.inject(:+) =="HHHHH"
+    if card_suit.uniq.count == 1
       true
     end
   end
 
 
-  # わんぺあ
+  #わんぺあ
   def judge_onepair(cards)
     card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 4
@@ -172,7 +170,7 @@ module Hands
   end
 
 
-    #フルハウス
+  #フルハウス
   def judge_full(cards)
     card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 2

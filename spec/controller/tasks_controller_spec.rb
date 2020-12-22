@@ -1,11 +1,9 @@
 require 'rails_helper'
-require_relative '../../app/controllers/concerns/hands.rb'
+include Hands
 
 RSpec.describe TasksController, type: :controller do
-  #include Hands
   describe "#index" do
     let(:params) {{cards: ""}}
-    #subject {response}
     it "正常にレスポンスを返すこと" do
       get :index
       expect(response).to be_success
@@ -31,7 +29,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "空欄です。<br>5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>"
+        expect(flash[:notice]).to eq EMPTY_MSG+"</br>"+FORMAT_MSG
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -42,7 +40,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>カードの枚数が2枚です。<br>1番目のカードの指定文字が不正です。(AAAAA)<br>"
+        expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"カードの枚数が1枚です。</br>1番目のカードの指定文字が不正です。(AAAAA)"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -53,7 +51,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5番目のカードの指定文字が不正です。(A1)<br>"
+        expect(flash[:notice]).to eq "5番目のカードの指定文字が不正です。(A1)"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -64,7 +62,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "カードが重複しています。<br>"
+        expect(flash[:notice]).to eq "カードが重複しています。"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -75,7 +73,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>4番目のカードの指定文字が不正です。(C7　H10)<br>全角スペースが含まれています。"
+        expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"4番目のカードの指定文字が不正です。(C7　H10)</br>"+HALF_SPACE_MSG
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -86,21 +84,11 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが帰ってきているか" do
-        expect(flash[:notice]).to eq "5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）<br>カードの枚数が4枚です。<br>"
+        expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"カードの枚数が4枚です。"
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
 
-    describe "正しい入力のときのバリデーション" do
-      before do
-        post :check, params.merge(cards: "S1 D12 C3 H7 H1")
-      end
-      it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ワンペア"
-      end
-      it_behaves_like "正常にページ遷移ができていること"
-    end
 
     end
 
@@ -112,7 +100,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ストレートフラッシュ"
+        expect(controller.instance_variable_get("@role")).to eq STRIGHTFLUSH[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -123,7 +111,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ストレート"
+        expect(controller.instance_variable_get("@role")).to eq STRAIGHT[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -134,7 +122,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "フラッシュ"
+        expect(controller.instance_variable_get("@role")).to eq FLUSH[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -145,7 +133,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "フォー・オブ・ア・カインド"
+        expect(controller.instance_variable_get("@role")).to eq FOUROFAKIND[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -156,7 +144,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "スリー・オブ・ア・カインド"
+        expect(controller.instance_variable_get("@role")).to eq THREEOFAKIND[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -167,7 +155,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "フルハウス"
+        expect(controller.instance_variable_get("@role")).to eq FULLHOUSE[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -178,7 +166,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ツーペア"
+        expect(controller.instance_variable_get("@role")).to eq TWOPAIR[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -189,7 +177,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ワンペア"
+        expect(controller.instance_variable_get("@role")).to eq ONEPAIR[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -200,7 +188,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "役が帰ってきているか" do
-        expect(controller.instance_variable_get("@role")).to eq "ハイカード"
+        expect(controller.instance_variable_get("@role")).to eq HIGHCARD[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end

@@ -64,7 +64,7 @@ module API
           if error_array == [] && result_array == []
             {
               error: {
-                message: strength_array
+                message: "入力してください"
               }
             }
           elsif result_array == []
