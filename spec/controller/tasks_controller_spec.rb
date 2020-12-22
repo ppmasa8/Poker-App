@@ -28,7 +28,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq EMPTY_MSG+"</br>"+FORMAT_MSG
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -39,7 +39,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "AAAAA")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"カードの枚数が1枚です。</br>1番目のカードの指定文字が不正です。(AAAAA)"
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -50,7 +50,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D12 C3 H7 A1")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq "5番目のカードの指定文字が不正です。(A1)"
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -61,7 +61,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D12 C3 H7 S1")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq "カードが重複しています。"
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -72,7 +72,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S2 S11 D2 C7　H10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"4番目のカードの指定文字が不正です。(C7　H10)</br>"+HALF_SPACE_MSG
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -83,7 +83,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D12 C3 H7")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "エラーメッセージが帰ってきているか" do
+      it "エラーメッセージが返ってきているか" do
         expect(flash[:notice]).to eq FORMAT_MSG+"</br>"+"カードの枚数が4枚です。"
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -99,7 +99,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 S12 S13 S11 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq STRIGHTFLUSH[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -110,7 +110,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D12 S13 H11 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq STRAIGHT[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -121,7 +121,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 S2 S13 S11 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq FLUSH[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -132,7 +132,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D1 C1 H1 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq FOUROFAKIND[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -143,7 +143,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D1 C1 H11 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq THREEOFAKIND[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -154,7 +154,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D1 S13 H13 C13")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq FULLHOUSE[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -165,7 +165,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D13 S13 H10 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq TWOPAIR[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -176,7 +176,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D12 S13 H1 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq ONEPAIR[0]
       end
       it_behaves_like "正常にページ遷移ができていること"
@@ -187,7 +187,7 @@ RSpec.describe TasksController, type: :controller do
         post :check, params.merge(cards: "S1 D3 S13 H11 S10")
       end
       it_behaves_like "リクエストが成功しているか"
-      it "役が帰ってきているか" do
+      it "役が返ってきているか" do
         expect(controller.instance_variable_get("@role")).to eq HIGHCARD[0]
       end
       it_behaves_like "正常にページ遷移ができていること"

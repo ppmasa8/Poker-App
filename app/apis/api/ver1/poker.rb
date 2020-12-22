@@ -34,9 +34,10 @@ module API
           end
 
           #各手札ごとのメッセージを入力する処理
+          #一番強い役の場合
           (0..hands.length-1).each do |i|
             error_messages = []
-            #エラーメッセージの場合
+              #エラーメッセージの場合
             if strength_array[i] == 0
               error_array << {
                 card: hands[i],
