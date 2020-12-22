@@ -11,7 +11,6 @@ class TasksController < ApplicationController
     error_messages = []
 
     # 共通処理の部分
-    # [TODO]validationがtrueの時に処理が通るようにしたほうが良い  fixed
     if @cards == nil
     elsif validation(@cards, error_messages) == true
       @role = judge_return_role(@cards)

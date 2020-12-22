@@ -12,77 +12,61 @@ module API
           requires :cards, type: Array
         end
 
-        desc 'ポーカーの役を返す'
-
 
         post "/" do
-          #json形式のメッセージの配列 #[todo]コメントを具体的に（実態に即した形で）fixed
-          # [todo]リーダブルこーど読んでね♡
           result_array = []
           error_array = []
-          error_messages = []
-          #強さ判定の配列
-          strength_array = [] #[todo]変数名をしゅうせいする fixed
+
+          #強さの値の配列
+          strength_array = []
 
           #受け取った値の処理
           hands = params[:cards]
 
-          #手札の強さの格納のメソッド
-          index=0
-          while index < hands.length
-            if validation(hands[index], error_messages) == true
-              strength_array << judge_return_number(hands)
+          #エラーには０を入れ、役がつくものには強さの値を入れる処理
+          (0..hands.length-1).each do |i|
+            error_messages = []
+            if validation(hands[i], error_messages) == true
+              strength_array << judge_return_number(hands[i])
             else
               strength_array << 0
             end
-            index+=1
           end
 
-
-          #手札のバリデーションのメソッド
-          index=0
-          while index < hands.length
+          #各手札ごとのメッセージを入力する処理
+          (0..hands.length-1).each do |i|
             error_messages = []
-            if strength_array[index] == 0
+            #エラーメッセージの場合
+            if strength_array[i] == 0
               error_array << {
-                card: hands[index],
-                msg: validation(hands[index], error_messages)
+                card: hands[i],
+                msg: validation(hands[i], error_messages)
               }
-            end
-            index+=1
-          end
-
-
-          #正常なデータの処理のメソッド
-          index=0
-          while index < hands.length
-            if strength_array[index] == 0
-            elsif strength_array[index] == strength_array.max
+              #一番強い役の場合
+            elsif strength_array[i] == strength_array.max
               result_array << {
-                card: hands[index],
-                hand: judge_return_role(hands[index]),
+                card: hands[i],
+                hand: judge_return_role(hands[i]),
                 best: "true"
               }
+              #その他の役の場合
             else
               result_array << {
-                card: hands[index],
-                hand: judge_return_role(hands[index]),
+                card: hands[i],
+                hand: judge_return_role(hands[i]),
                 best: "false"
               }
             end
-            index+=1
           end
-
-
 
 
           #json形式のデータがケース別に入る
           if error_array == [] && result_array == []
-          {
-            error: {
-              message: "入力してください"
+            {
+              error: {
+                message: strength_array
+              }
             }
-          }
           elsif result_array == []
             {
               error:error_array
@@ -97,6 +81,9 @@ module API
               error:error_array
             }
           end
+
+
+
 
 
         end

@@ -14,7 +14,6 @@ module Hands
 
   # バリデーションまとめ
   def validation(cards, error_messages)
-    #[TODO]変数名と実態（処理の中身）を合わせたほうがいい  fixed
     ensure_not_empty(cards, error_messages)
     ensure_format(cards, error_messages)
     ensure_number_of_cards(cards, error_messages)
@@ -28,7 +27,6 @@ module Hands
   #空欄の場合のバリデーション
   def ensure_not_empty(cards, error_messages)
     if cards.empty?
-      #[TODO]brをcontrolelrかviewに移す  fixed
       msg = "空欄です。"
       error_messages << msg
     end
@@ -54,9 +52,9 @@ module Hands
   #カードの不正をチェックするバリデーション
   def ensure_validity(cards, error_messages)
     cards = cards.split
-    cards.each.with_index do |card, i|
+    cards.each.with_index(1) do |card, i|
       if !card.match(/^[SDCH][2-9]$|^[SDCH][1][0-3]$|^[SDCH][1]$/)
-        msg = "#{i+1}番目のカードの指定文字が不正です。(#{card})"
+        msg = "#{i}番目のカードの指定文字が不正です。(#{card})"
         error_messages << msg
       end
     end
@@ -66,7 +64,7 @@ module Hands
   def ensure_not_duplicate(cards, error_messages)
     card = cards.split(" ")
     if card[0]==nil || card[1]==nil || card[2]==nil && card.uniq.count == 2|| card[3]==nil && card.uniq.count == 3 || card[4]==nil && card.uniq.count ==4
-    elsif card.uniq.count != 5 || cards.scan(/[a-zA-Z](\d|\d\d)/).size > 5 && card.uniq.count == 5
+    elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])/).size != card.uniq.count
       msg = "カードが重複しています。"
       error_messages << msg
     end
@@ -74,7 +72,6 @@ module Hands
 
   #全角スペースのバリデーション
   def ensure_half_space(cards, error_messages)
-    #[TODO]indexは用途が違うので、実現したいことにマッチしたメソッドを使う　　fixed
     if cards.include?("　")
       msg = "全角スペースが含まれています。"
       error_messages << msg
@@ -123,14 +120,7 @@ module Hands
 
   #ストレートを見る処理
   def judge_straight(cards)
-    card_number = Array.new
-    #[todo]for文は以下みたいな感じに修正する fixed
-    #cards.each.with_index do |card, index|
-    #puts "#{card}は#{index}番目です"
-    #end
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     exc_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
     if card_number.inject(:*) == card_number.min**5 + card_number.min**4*10 + card_number.min**3*35 + card_number.min**2*50 + 24*card_number.min
       true
@@ -142,12 +132,8 @@ module Hands
 
   #フラッシュを見る処理
   def judge_flash(cards)
-    card_suit = Array.new
-    0.upto(4) do |index|
-      card_suit[index] = cards[index].slice(0)
-    end
-    doc_suit = card_suit[0]+card_suit[1]+card_suit[2]+card_suit[3]+card_suit[4]
-    if doc_suit == "SSSSS" || doc_suit =="DDDDD" || doc_suit =="CCCCC" || doc_suit =="HHHHH"
+    card_suit = cards.each.map {|s| s.slice(0)}
+    if card_suit.inject(:+) == "SSSSS" || card_suit.inject(:+) =="DDDDD" || card_suit.inject(:+) =="CCCCC" || card_suit.inject(:+) =="HHHHH"
       true
     end
   end
@@ -155,10 +141,7 @@ module Hands
 
   # わんぺあ
   def judge_onepair(cards)
-    card_number = Array.new
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 4
       true
     end
@@ -166,10 +149,7 @@ module Hands
 
   #つーぺあ
   def judge_twopair(cards)
-    card_number = Array.new
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 3 && card_number.count(card_number[0]) == 2 || card_number.uniq.count == 3 && card_number.count(card_number[1]) == 2
       true
     end
@@ -177,10 +157,7 @@ module Hands
 
   #すりー
   def judge_three(cards)
-    card_number = Array.new
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 3
       true
     end
@@ -188,10 +165,7 @@ module Hands
 
   #ふぉー
   def judge_four(cards)
-    card_number = Array.new
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 2 && card_number.count(card_number[0]) == 1 || card_number.uniq.count == 2 && card_number.count(card_number[0]) == 4
       true
     end
@@ -200,10 +174,7 @@ module Hands
 
     #フルハウス
   def judge_full(cards)
-    card_number = Array.new
-    0.upto(4) do |index|
-      card_number[index] = cards[index].gsub(/[^\d]/, "").to_i
-    end
+    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
     if card_number.uniq.count == 2
       true
     end
