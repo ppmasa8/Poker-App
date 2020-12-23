@@ -63,8 +63,8 @@ module Hands
   #重複チェックのバリデーション
   def ensure_not_duplicate(cards, error_messages)
     card = cards.split(" ")
-    if card[0]==nil || card[1]==nil || card[2]==nil && card.uniq.count == 2|| card[3]==nil && card.uniq.count == 3 || card[4]==nil && card.uniq.count ==4
-    elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])/).size != card.uniq.count
+    if cards.include?("　")
+    elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])\b/).size != card.uniq.count
       error_messages << DUPLICATE_MSG
     end
   end
@@ -119,10 +119,11 @@ module Hands
   #ストレートを見る処理
   def judge_straight(cards)
     card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    exc_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
-    if card_number.inject(:*) == card_number.min**5 + card_number.min**4*10 + card_number.min**3*35 + card_number.min**2*50 + 24*card_number.min
+    sort_num = card_number.sort
+    royal_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
+    if sort_num[0]+sort_num[4] == sort_num[1]+sort_num[3] && sort_num[0]+sort_num[4] == sort_num[2]*2 && card_number.uniq.count == 5
       true
-    elsif card_number.sum == 47 && exc_judge == 0 && card_number.uniq.count == 5
+    elsif card_number.sum == 47 && royal_judge == 0 && card_number.uniq.count == 5
       true
     end
   end
