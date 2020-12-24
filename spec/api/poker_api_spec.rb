@@ -20,7 +20,8 @@ RSpec.describe "Poker", type: :request do
         end
         it_behaves_like "レスポンスが返ってくるか"
         it "一つのエラーに対して、それぞれ対応したメッセージが返ってくるか" do
-          expect(json).to eq "error" => [{"card"=>"", "msg"=>[EMPTY_MSG, FORMAT_MSG]}]
+          expect(json).to eq "result" => [],
+                             "error" => [{"card"=>"", "msg"=>[EMPTY_MSG, FORMAT_MSG]}]
         end
       end
 
@@ -30,7 +31,8 @@ RSpec.describe "Poker", type: :request do
         end
         it_behaves_like "レスポンスが返ってくるか"
           it "複数のエラーに対して、それぞれ対応したメッセージが返ってくるか" do
-            expect(json).to eq "error" => [{"card"=>"", "msg"=>[EMPTY_MSG, FORMAT_MSG]}, {"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>[FORMAT_MSG, "カードの枚数が1枚です。", "1番目のカードの指定文字が不正です。(aaa)"]}]
+            expect(json).to eq "result" => [],
+                               "error" => [{"card"=>"", "msg"=>[EMPTY_MSG, FORMAT_MSG]}, {"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>[FORMAT_MSG, "カードの枚数が1枚です。", "1番目のカードの指定文字が不正です。(aaa)"]}]
           end
         end
       end
@@ -43,7 +45,8 @@ RSpec.describe "Poker", type: :request do
         end
         it_behaves_like "レスポンスが返ってくるか"
         it "一つのリザルトに対して、対応したメッセージ(true)が返ってくるか" do
-          expect(json).to eq "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}]
+          expect(json).to eq "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}],
+                             "error" => []
         end
       end
 
@@ -53,7 +56,8 @@ RSpec.describe "Poker", type: :request do
         end
         it_behaves_like "レスポンスが返ってくるか"
         it "複数のリザルトに対して、対応したメッセージ(一つのtrue)が返ってくるか" do
-          expect(json).to eq "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"false", "card"=>"H9 C9 S9 H1 C1", "hand"=>FULLHOUSE[0]}, {"best"=>"false", "card"=>"H13 D13 C2 D2 H1", "hand"=>TWOPAIR[0]}]
+          expect(json).to eq "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>false, "card"=>"H9 C9 S9 H1 C1", "hand"=>FULLHOUSE[0]}, {"best"=>false, "card"=>"H13 D13 C2 D2 H1", "hand"=>TWOPAIR[0]}],
+                             "error" => []
         end
       end
 
@@ -63,7 +67,8 @@ RSpec.describe "Poker", type: :request do
         end
         it_behaves_like "レスポンスが返ってくるか"
         it "複数のリザルトに対して、対応したメッセージ(複数のtrue)が返ってくるか" do
-          expect(json).to eq "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"true", "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"false", "card"=>"H13 D13 C2 D2 H1", "hand"=>TWOPAIR[0]}]
+          expect(json).to eq "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>true, "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}, {"best"=>false, "card"=>"H13 D13 C2 D2 H1", "hand"=>TWOPAIR[0]}],
+                             "error" => []
         end
       end
     end
@@ -77,7 +82,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "一つのエラーと一つのリザルトに対して、対応したメッセージ(trueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"", "msg"=>[EMPTY_MSG, FORMAT_MSG]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}]
         end
       end
 
@@ -88,7 +93,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "複数のエラーと一つのリザルトに対して、対応したメッセージ(trueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>[FORMAT_MSG, "カードの枚数が1枚です。", "1番目のカードの指定文字が不正です。(aaa)"]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}]
         end
       end
 
@@ -99,7 +104,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "複数のエラーと複数のリザルトに対して、対応したメッセージ(一つのtrueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>[FORMAT_MSG, "カードの枚数が1枚です。", "1番目のカードの指定文字が不正です。(aaa)"]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"false", "card"=>"S13 S12 S11 S9 S6", "hand"=>FLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>false, "card"=>"S13 S12 S11 S9 S6", "hand"=>FLUSH[0]}]
         end
       end
 
@@ -110,7 +115,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "複数のエラーと複数のリザルトに対して、対応したメッセージ(複数のtrueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}, {"card"=>"aaa", "msg"=>[FORMAT_MSG, "カードの枚数が1枚です。", "1番目のカードの指定文字が不正です。(aaa)"]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"true", "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>true, "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}]
         end
       end
 
@@ -121,7 +126,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "一つのエラーと複数のリザルトに対して、対応したメッセージ(一つのtrueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"true", "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>true, "card"=>"H1 H13 H12 H11 H10", "hand"=>STRIGHTFLUSH[0]}]
         end
       end
 
@@ -132,7 +137,7 @@ RSpec.describe "Poker", type: :request do
         it_behaves_like "レスポンスが返ってくるか"
         it "一つのエラーと複数のリザルトに対して、対応したメッセージ(複数のtrueとエラー)が返ってくるか" do
           expect(json).to eq "error" => [{"card"=>"S2 S4 S6 S14 S1", "msg"=>["4番目のカードの指定文字が不正です。(S14)"]}],
-                             "result" => [{"best"=>"true", "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>"false", "card"=>"S13 S12 S11 S9 S6", "hand"=>FLUSH[0]}]
+                             "result" => [{"best"=>true, "card"=>"C7 C6 C5 C4 C3", "hand"=>STRIGHTFLUSH[0]}, {"best"=>false, "card"=>"S13 S12 S11 S9 S6", "hand"=>FLUSH[0]}]
         end
       end
     end

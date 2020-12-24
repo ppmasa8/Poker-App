@@ -8,8 +8,8 @@
     <div class="text-holder"><%= text_field_tag(:cards,value=@cards, placeholder: "C3 H5 D6 S11 C2") %></div>
     <div class="button"><%= submit_tag "Check" %></div>
   <% end %>
-  <% if flash[:notice] %>
-    <div class="error"><%= flash[:notice].html_safe %></div>
+  <% if @msg.present? %>
+    <div class="error"><%= @msg.html_safe %></div>
   <% end %>
   <div class="role"><%= @role %></div>
 

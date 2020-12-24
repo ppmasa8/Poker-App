@@ -14,198 +14,197 @@ module Hands
   DUPLICATE_MSG = "カードが重複しています。"
   HALF_SPACE_MSG = "全角スペースが含まれています。"
 
-  #バリデーションまとめ
-  def validation(cards, error_messages)
-    ensure_not_empty(cards, error_messages)
-    ensure_format(cards, error_messages)
-    ensure_number_of_cards(cards, error_messages)
-    ensure_validity(cards, error_messages)
-    ensure_not_duplicate(cards, error_messages)
-    ensure_half_space(cards, error_messages)
-    error_messages.empty? ? true : error_messages
-  end
+  class Card
+    attr_accessor :cards, :error_messages, :card
 
-
-  #空欄の場合のバリデーション
-  def ensure_not_empty(cards, error_messages)
-    if cards.empty?
-      error_messages << EMPTY_MSG
+    def initialize(cards)
+      @cards = cards
+      @error_messages = []
+      @card = cards.split
     end
-  end
 
-  #データの形式のバリデーション
-  def ensure_format(cards, error_messages)
-    if !cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
-      error_messages << FORMAT_MSG
+    #バリデーションまとめ
+    def put_error_messages
+      ensure_not_empty
+      ensure_format
+      ensure_number_of_cards
+      ensure_validity
+      ensure_not_duplicate
+      ensure_half_space
+      error_messages
     end
-  end
 
-  #カードの枚数のバリデーション
-  def ensure_number_of_cards(cards, error_messages)
-    card_count = cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z]\b)/).size
-    if card_count != 5 && card_count != 0
-      msg = "カードの枚数が#{card_count}枚です。"
-      error_messages << msg
+    #空欄の場合のバリデーション
+    def ensure_not_empty
+      error_messages << EMPTY_MSG if cards.empty?
     end
-  end
 
-  #カードの不正をチェックするバリデーション
-  def ensure_validity(cards, error_messages)
-    cards = cards.split
-    cards.each.with_index(1) do |card, i|
-      if !card.match(/^[SDCH][2-9]$|^[SDCH][1][0-3]$|^[SDCH][1]$/)
-        msg = "#{i}番目のカードの指定文字が不正です。(#{card})"
-        error_messages << msg
+    #データの形式のバリデーション
+    def ensure_format
+      if !cards.match(/^[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)\s[a-zA-Z](\d|\d\d)$/)
+        error_messages << FORMAT_MSG
       end
     end
-  end
 
-  #重複チェックのバリデーション
-  def ensure_not_duplicate(cards, error_messages)
-    card = cards.split(" ")
-    if cards.include?("　")
-    elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])\b/).size != card.uniq.count
-      error_messages << DUPLICATE_MSG
+    #カードの枚数のバリデーション
+    def ensure_number_of_cards
+      card_count = cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z]\b)/).size
+      if card_count != 5 && card_count != 0
+        error_messages << "カードの枚数が#{card_count}枚です。"
+      end
     end
-  end
 
-  #全角スペースのバリデーション
-  def ensure_half_space(cards, error_messages)
-    if cards.include?("　")
-      error_messages << HALF_SPACE_MSG
+    #カードの不正をチェックするバリデーション
+    def ensure_validity
+      card = cards.split
+      card.each.with_index(1) do |card, i|
+        if !card.match(/^[SDCH][2-9]$|^[SDCH][1][0-3]$|^[SDCH][1]$/)
+          error_messages << "#{i}番目のカードの指定文字が不正です。(#{card})"
+        end
+      end
     end
-  end
 
-
-
-
-  #以下、役判定
-  #役判定して約名を返す処理
-  def judge_return_role(cards)
-    cards = cards.split
-    if judge_straight(cards) && judge_flash(cards)
-      result = STRIGHTFLUSH
-      result[0]
-    elsif judge_straight(cards)
-      result = STRAIGHT
-      result[0]
-    elsif judge_flash(cards)
-      result = FLUSH
-      result[0]
-    elsif judge_onepair(cards)
-      result = ONEPAIR
-      result[0]
-    elsif judge_twopair(cards)
-      result = TWOPAIR
-      result[0]
-    elsif judge_three(cards)
-      result = THREEOFAKIND
-      result[0]
-    elsif judge_four(cards)
-      result = FOUROFAKIND
-      result[0]
-    elsif judge_full(cards)
-      result = FULLHOUSE
-      result[0]
-    else
-      result = HIGHCARD
-      result[0]
+    #重複チェックのバリデーション
+    def ensure_not_duplicate
+      card = cards.split(" ")
+      if cards.include?("　")
+      elsif cards.scan(/[a-zA-Z](\d|\d\d|[a-zA-Z])\b/).size != card.uniq.count
+        error_messages << DUPLICATE_MSG
+      end
     end
-  end
 
-
-
-
-  #ストレートを見る処理
-  def judge_straight(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    sort_num = card_number.sort
-    royal_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
-    if sort_num[0]+sort_num[4] == sort_num[1]+sort_num[3] && sort_num[0]+sort_num[4] == sort_num[2]*2 && card_number.uniq.count == 5
-      true
-    elsif card_number.sum == 47 && royal_judge == 0 && card_number.uniq.count == 5
-      true
+    #全角スペースのバリデーション
+    def ensure_half_space
+      if cards.include?("　")
+        error_messages << HALF_SPACE_MSG
+      end
     end
-  end
 
 
-  #フラッシュを見る処理
-  def judge_flash(cards)
-    card_suit = cards.each.map {|s| s.slice(0)}
-    if card_suit.uniq.count == 1
-      true
+
+    #以下、役判定
+    #役判定して約名を返す処理
+    def judge_return_role
+      if judge_straight && judge_flash
+        result = STRIGHTFLUSH
+        result[0]
+      elsif judge_straight
+        result = STRAIGHT
+        result[0]
+      elsif judge_flash
+        result = FLUSH
+        result[0]
+      elsif judge_onepair
+        result = ONEPAIR
+        result[0]
+      elsif judge_twopair
+        result = TWOPAIR
+        result[0]
+      elsif judge_three
+        result = THREEOFAKIND
+        result[0]
+      elsif judge_four
+        result = FOUROFAKIND
+        result[0]
+      elsif judge_full
+        result = FULLHOUSE
+        result[0]
+      else
+        result = HIGHCARD
+        result[0]
+      end
     end
-  end
 
 
-  #わんぺあ
-  def judge_onepair(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    if card_number.uniq.count == 4
-      true
+
+    #ストレートを見る処理
+    def judge_straight
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      sort_num = card_number.sort
+      royal_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
+      if sort_num[0]+sort_num[4] == sort_num[1]+sort_num[3] && sort_num[0]+sort_num[4] == sort_num[2]*2 && card_number.uniq.count == 5
+        true
+      elsif card_number.sum == 47 && royal_judge == 0 && card_number.uniq.count == 5
+        true
+      end
     end
-  end
 
-  #つーぺあ
-  def judge_twopair(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    if card_number.uniq.count == 3 && card_number.count(card_number[0]) == 2 || card_number.uniq.count == 3 && card_number.count(card_number[1]) == 2
-      true
+    #フラッシュを見る処理
+    def judge_flash
+      card_suit = card.each.map {|s| s.slice(0)}
+      if card_suit.uniq.count == 1
+        true
+      end
     end
-  end
 
-  #すりー
-  def judge_three(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    if card_number.uniq.count == 3
-      true
+    #わんぺあ
+    def judge_onepair
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      if card_number.uniq.count == 4
+        true
+      end
     end
-  end
 
-  #ふぉー
-  def judge_four(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    if card_number.uniq.count == 2 && card_number.count(card_number[0]) == 1 || card_number.uniq.count == 2 && card_number.count(card_number[0]) == 4
-      true
+    #つーぺあ
+    def judge_twopair
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      if card_number.uniq.count == 3 && card_number.count(card_number[0]) == 2 || card_number.uniq.count == 3 && card_number.count(card_number[1]) == 2
+        true
+      end
     end
-  end
 
-
-  #フルハウス
-  def judge_full(cards)
-    card_number = cards.each.map {|n| n.gsub(/[^\d]/, "").to_i}
-    if card_number.uniq.count == 2
-      true
+    #すりー
+    def judge_three
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      if card_number.uniq.count == 3
+        true
+      end
     end
-  end
+
+    #ふぉー
+    def judge_four
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      if card_number.uniq.count == 2 && card_number.count(card_number[0]) == 1 || card_number.uniq.count == 2 && card_number.count(card_number[0]) == 4
+        true
+      end
+    end
+
+    #フルハウス
+    def judge_full
+      card_number = card.each.map {|n| n.gsub(/[^\d]/, "").to_i}
+      if card_number.uniq.count == 2
+        true
+      end
+    end
 
 
 
-  #役判定して役に対応した数字を返す処理
-  def judge_return_number(cards)
-      cards = cards.split
-      if judge_straight(cards) && judge_flash(cards)
+    #役判定して役に対応した数字を返す処理
+    def judge_return_number
+      if put_error_messages.present?
+        0
+      elsif judge_straight && judge_flash
         result = STRIGHTFLUSH
         result[1]
-      elsif judge_straight(cards)
+      elsif judge_straight
         result = STRAIGHT
         result[1]
-      elsif judge_flash(cards)
+      elsif judge_flash
         result = FLUSH
         result[1]
-      elsif judge_onepair(cards)
+      elsif judge_onepair
         result = ONEPAIR
         result[1]
-      elsif judge_twopair(cards)
+      elsif judge_twopair
         result = TWOPAIR
         result[1]
-      elsif judge_three(cards)
+      elsif judge_three
         result = THREEOFAKIND
         result[1]
-      elsif judge_four(cards)
+      elsif judge_four
         result = FOUROFAKIND
         result[1]
-      elsif judge_full(cards)
+      elsif judge_full
         result = FULLHOUSE
         result[1]
       else
@@ -213,6 +212,7 @@ module Hands
         result[1]
       end
     end
+  end
 end
 
 
