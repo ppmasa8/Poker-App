@@ -39,7 +39,7 @@ module API
             result:result_array,
             error:error_array
           }
-
+  
         end
       end
     end
