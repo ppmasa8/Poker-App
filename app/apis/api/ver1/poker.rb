@@ -12,8 +12,8 @@ module API
 
         post "/" do
           #メッセージの配列
-          result_array = []
-          error_array = []
+          result = []
+          error = []
           #受け取った値の処理
           hands = params[:cards]
           #強さの値の配列
@@ -21,23 +21,23 @@ module API
           #メッセージ入力
           hands.each_with_index do |hand, i|
             card = Card.new(hand)
-            if strength_array[i] != 0
-              result_array << {
+            if card.valid?
+              error << {
                 card: hand,
-                hand: card.judge_return_role,
-                best: strength_array[i] == strength_array.max ? true : false
+                msg: card.error_messages
               }
-            else
-              error_array << {
-                card: hand,
-                msg: card.put_error_messages
-              }
+              next
             end
+            result << {
+              card: hand,
+              hand: card.judge_return_role,
+              best: strength_array[i] == strength_array.max
+            }
           end
 
           {
-            result:result_array,
-            error:error_array
+            result:result,
+            error:error
           }
   
         end
@@ -45,10 +45,3 @@ module API
     end
   end
 end
-
-
-
-
-
-
-

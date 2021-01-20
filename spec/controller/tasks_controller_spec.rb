@@ -29,7 +29,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq EMPTY_MSG+"</br>"+FORMAT_MSG
+        expect(controller.instance_variable_get("@msg")).to eq [EMPTY_MSG,FORMAT_MSG]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -40,7 +40,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq FORMAT_MSG+"</br>"+"カードの枚数が1枚です。</br>1番目のカードの指定文字が不正です。(AAAAA)"
+        expect(controller.instance_variable_get("@msg")).to eq [FORMAT_MSG,"カードの枚数が1枚です。","1番目のカードの指定文字が不正です。(AAAAA)"]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -51,7 +51,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq "5番目のカードの指定文字が不正です。(A1)"
+        expect(controller.instance_variable_get("@msg")).to eq ["5番目のカードの指定文字が不正です。(A1)"]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -62,7 +62,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq "カードが重複しています。"
+        expect(controller.instance_variable_get("@msg")).to eq [DUPLICATE_MSG]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -73,7 +73,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq FORMAT_MSG+"</br>"+"4番目のカードの指定文字が不正です。(C7　H10)</br>"+HALF_SPACE_MSG
+        expect(controller.instance_variable_get("@msg")).to eq [FORMAT_MSG,"4番目のカードの指定文字が不正です。(C7　H10)",HALF_SPACE_MSG]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end
@@ -84,7 +84,7 @@ RSpec.describe TasksController, type: :controller do
       end
       it_behaves_like "リクエストが成功しているか"
       it "エラーメッセージが返ってきているか" do
-        expect(controller.instance_variable_get("@msg")).to eq FORMAT_MSG+"</br>"+"カードの枚数が4枚です。"
+        expect(controller.instance_variable_get("@msg")).to eq [FORMAT_MSG,"カードの枚数が4枚です。"]
       end
       it_behaves_like "正常にページ遷移ができていること"
     end

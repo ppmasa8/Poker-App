@@ -9,7 +9,7 @@
     <div class="button"><%= submit_tag "Check" %></div>
   <% end %>
   <% if @msg.present? %>
-    <div class="error"><%= @msg.html_safe %></div>
+    <div class="error"><%= msg_format.html_safe %></div>
   <% end %>
   <div class="role"><%= @role %></div>
 

@@ -5,11 +5,13 @@ class TasksController < ApplicationController
   end
 
   def check
-    cards = Card.new(params[:cards])
-    @msg = cards.put_error_messages.join("</br>")
-    @role = cards.judge_return_role if @msg.empty?
-
-    # ページ再読み込み
+    if params[:cards]==nil
+    else
+      cards = Card.new(params[:cards])
+      @msg = cards.error_message
+      @role = cards.judge_return_role if @msg.nil?
+      @cards = params[:cards]
+    end
     render("tasks/index")
   end
 
