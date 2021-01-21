@@ -13,14 +13,16 @@ module API
         post "/" do
           #メッセージの配列
           result = []
-          error = []
-          #受け取った値の処理
-          hands = params[:cards]
-          #強さの値の配列
-          strength_array = hands.each.map {|h| Card.new(h).judge_return_number}
+          error  = []
+          
+          hands  = params[:cards]
+          
+          role_strength_arr = hands.each.map {|h| Card.new(h).judge_return_number}
+
           #メッセージ入力
           hands.each_with_index do |hand, i|
             card = Card.new(hand)
+            #エラー判定
             if card.valid?
               error << {
                 card: hand,
@@ -28,13 +30,15 @@ module API
               }
               next
             end
+
             result << {
               card: hand,
               hand: card.judge_return_role,
-              best: strength_array[i] == strength_array.max
+              best: role_strength_arr[i] == role_strength_arr.max
             }
           end
 
+          #APIのレスポンスデータの型枠
           {
             result:result,
             error:error
