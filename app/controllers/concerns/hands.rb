@@ -103,14 +103,13 @@ module Hands
 
     def judge_straight
       sort_num = card_number.sort
-      royal_judge = (card_number[0]-1)*(card_number[1]-1)*(card_number[2]-1)*(card_number[3]-1)*(card_number[4]-1)
       #通常のストレート
       return true if sort_num[0]+sort_num[4] == sort_num[1]+sort_num[3] &&
         sort_num[0]+sort_num[4] == sort_num[2]*2 &&
         card_number.uniq.count == 5
       #ロイヤルストレート
       return true if card_number.sum == 47 &&
-        royal_judge == 0 &&
+        card_number.include?(1) &&
         card_number.uniq.count == 5
     end
 
