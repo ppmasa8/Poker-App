@@ -15,9 +15,9 @@ image is coming soon ....
 Nothing, if I had to write "Postman" (for API using)
 
 ## Usage
-* web
+* -WEB-
 * You type card like a S10 S11 S12 S1 S13
-* api
+* -API-
 * You type card like a "S10 S11 S12 S1 S13" , "D10 S11 H12 S1 S13" and more ....
 
 ## Authors
