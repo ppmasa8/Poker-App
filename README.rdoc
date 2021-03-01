@@ -1,23 +1,25 @@
 == README
 
-ポーカーの役を判定してくれるwebアプリと複数のカードの役と順位を判定するAPIを作りました。
- 
-# DEMO
- 
-デモ動画や図解を載せる（気が向いたら）
- 
-# Features
---webアプリ--
-https://quiet-badlands-38748.herokuapp.com/tasks/index
---API--
+# Poker Application
+This web-application can judge poker-hand.
+ex) D1 S1 C1 H1 S2 => "Four-card"
+image is coming soon ....
 
+## Dependency
+Ruby 2.4.7
+rails >= 4.2.11, < 5.0.0
+using grape for api
+using rspec for test-code
 
-# Note
-APIはPostmanとかで動かすと使えるよ
- 
-# Author
- 
-* 作成者
-ppmasa8
-* E-mail
-kiyokiyopip56@gmail.com
+## Setup
+Nothing, if I had to write "Postman" (for API using)
+
+## Usage
+<web>
+You type card like a S10 S11 S12 S1 S13
+<api>
+You type card like a "S10 S11 S12 S1 S13" , "D10 S11 H12 S1 S13" and more ....
+
+## Authors
+author      :ppmasa8
+mail-address:kiyokiyopip56@gmail.com
