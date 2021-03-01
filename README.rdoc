@@ -1,28 +1,23 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ポーカーの役を判定してくれるwebアプリと複数のカードの役と順位を判定するAPIを作りました。
+ 
+# DEMO
+ 
+デモ動画や図解を載せる（気が向いたら）
+ 
+# Features
+--webアプリ--
+https://quiet-badlands-38748.herokuapp.com/tasks/index
+--API--
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+# Note
+APIはPostmanとかで動かすと使えるよ
+ 
+# Author
+ 
+* 作成者
+ppmasa8
+* E-mail
+kiyokiyopip56@gmail.com
