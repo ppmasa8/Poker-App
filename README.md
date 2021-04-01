@@ -11,6 +11,12 @@ image is coming soon ....
 * using grape for api
 * using rspec for test-code
 
+## Functions
+* poker judge
+* validations
+* Rspec test
+* API
+
 ## Setup
 Nothing, if I had to write "Postman" (for API using)
 
