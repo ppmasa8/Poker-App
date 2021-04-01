@@ -1,4 +1,4 @@
-== README
+### README
 
 # Poker Application
 This web-application can judge poker-hand.
