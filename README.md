@@ -5,6 +5,10 @@ This web-application can judge poker-hand.
 *ex) D1 S1 C1 H1 S2 => "Four-card"
 image is coming soon ....
 * https://quiet-badlands-38748.herokuapp.com/tasks/index
+
+## Infrastructur
+![Untitled Diagram](https://user-images.githubusercontent.com/75968942/117134967-4b72e580-ade1-11eb-93b3-e50eb9ff2acb.png)
+
 ## Dependency
 * Ruby 2.4.7
 * rails >= 4.2.11, < 5.0.0
